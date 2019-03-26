@@ -1,0 +1,16 @@
+treeMap distance as key
+	city as value
+sa citeasca string
+sa calculam distantele pentru cele 3 distante
+sa identificam cele mai apropiate 
+care clasa este majoritara
+
+
+Must SOLVE untill next week
+
+NN- lab 4
+judet din setul mare
+si cele care nu le avem
+regula knn - vom cauta cei mai apropiati vecini
+intre prima 25.89 47.56 calc dist si care e cea mai
+apropiata (9,11,17,31)
