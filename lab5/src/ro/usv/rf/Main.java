@@ -8,6 +8,7 @@ import static ro.usv.rf.FileUtils.readFirstNNFile;
 public class Main {
     public static void main(String[] args) throws IOException {
         try {
+
             List<String> learningSet = FileUtils.readLearningSetFromFile("data.csv");
             nnRules(learningSet);
             String[] Set1 = readFirstNNFile("file1.txt");
@@ -20,12 +21,13 @@ public class Main {
             System.out.println("THIRD SET");
             valuesSet(Set3);
 
+
         } finally {
         System.out.println("Finished learning set operations");
         }
     }
 
-    public static void nnRules(List<String> learningSet){
+    private static void nnRules(List<String> learningSet){
 
          TreeMap<Double, String> firstTmap =  new TreeMap<Double, String>();
          TreeMap<Double, String> secondTmap =  new TreeMap<Double, String>();
@@ -55,6 +57,11 @@ public class Main {
                 Map<Double,String> temporary2 = sortByKeysTwo(secondTmap);
                 Map<Double,String> temporary3 = sortByKeysThree(thirdTmap);
 
+
+
+
+
+
                 //Write sorted values in a file
                 try{
                     File file=new File("file1.txt");
@@ -68,7 +75,7 @@ public class Main {
                     pw.close();
                     fos.close();
                 }catch(Exception e){
-                    System.out.println("Can't write in file!!");
+                    System.out.println("Can't write in file1!!");
                 }
                 try{
 
@@ -83,7 +90,7 @@ public class Main {
                     pw.close();
                     fos.close();
                 }catch(Exception e){
-                    System.out.println("Can't write in file!!");
+                    System.out.println("Can't write in file2!!");
                 }
                 try{
 
@@ -98,24 +105,25 @@ public class Main {
                     pw.close();
                     fos.close();
                 }catch(Exception e) {
-                    System.out.println("Can't write in file!!");
+                    System.out.println("Can't write in file3!!");
                 }
 
             }
         }
     }
 
-    public static <K extends Comparable, V> TreeMap <K,V> sortByKeysOne (TreeMap<K,V> firstCity) {
+    private static <K extends Comparable, V> TreeMap <K,V> sortByKeysOne(TreeMap<K, V> firstCity) {
         return new TreeMap<>(firstCity);
     }
-    public static <K extends Comparable, V> TreeMap <K,V> sortByKeysTwo (TreeMap<K,V> secondCity) {
+    private static <K extends Comparable, V> TreeMap <K,V> sortByKeysTwo(TreeMap<K, V> secondCity) {
         return new TreeMap<>(secondCity);
     }
-    public static <K extends Comparable, V> TreeMap <K,V> sortByKeysThree (TreeMap<K,V> thirdCity) {
+    private static <K extends Comparable, V> TreeMap <K,V> sortByKeysThree(TreeMap<K, V> thirdCity) {
         return new TreeMap<>(thirdCity);
     }
-    public static void valuesSet(String[] Set){
+    private static void valuesSet(String[] Set){
         int[] knn_cases = new int[]{9,11,17,31};
+        //map for every case
         Map<String,Integer> nrOfRepsCase1 = new HashMap<String,Integer>();
         Map<String,Integer> nrOfRepsCase2 = new HashMap<String,Integer>();
         Map<String,Integer> nrOfRepsCase3 = new HashMap<String,Integer>();
@@ -123,28 +131,29 @@ public class Main {
         int i=1;
         for(String str : Set){
 
-            if(nrOfRepsCase1.containsKey(str) && i<=knn_cases[0]) {
+            if(nrOfRepsCase1.containsKey(str) && i<=9) {
                 nrOfRepsCase1.put(str,nrOfRepsCase1.get(str) + 1);
             }
             else {
                 nrOfRepsCase1.put(str, 1);
+
             }
 
-            if(nrOfRepsCase2.containsKey(str) && i<=knn_cases[1]) {
+            if(nrOfRepsCase2.containsKey(str) && i<=11) {
                 nrOfRepsCase2.put(str,nrOfRepsCase2.get(str) + 1);
             }
             else {
                 nrOfRepsCase2.put(str, 1);
             }
 
-            if(nrOfRepsCase3.containsKey(str) && i<=knn_cases[2]) {
+            if(nrOfRepsCase3.containsKey(str) && i<=17) {
                 nrOfRepsCase3.put(str,nrOfRepsCase3.get(str) + 1);
             }
             else {
                 nrOfRepsCase3.put(str, 1);
             }
 
-            if(nrOfRepsCase4.containsKey(str) && i<=knn_cases[3]) {
+            if(nrOfRepsCase4.containsKey(str) && i<=31) {
                 nrOfRepsCase4.put(str,nrOfRepsCase4.get(str) + 1);
             }
             else {
@@ -153,39 +162,52 @@ public class Main {
 
             i++;
         }
+
+        for (Map.Entry<String, Integer> entry : nrOfRepsCase4.entrySet()) {
+            System.out.println(entry.getValue() + "  " + entry.getKey());
+
+        }
+
         int max=0;
         String finalValMax= null;
 
         for (Map.Entry<String, Integer> entry : nrOfRepsCase1.entrySet()) {
             if(entry.getValue()>max) {
                 finalValMax = entry.getKey();
+                max = entry.getValue();
             }
         }
-        System.out.println("k =  " + knn_cases[0] + " has class: " + finalValMax);
+        System.out.println(" k =  " + knn_cases[0] + " has class: " + finalValMax);
         finalValMax= null;
+        max=0;
 
         for (Map.Entry<String, Integer> entry : nrOfRepsCase2.entrySet()) {
             if(entry.getValue()>max) {
                 finalValMax = entry.getKey();
+                max = entry.getValue();
             }
         }
         System.out.println(" k =  " + knn_cases[1] + " has class: " + finalValMax);
         finalValMax= null;
+        max=0;
 
         for (Map.Entry<String, Integer> entry : nrOfRepsCase3.entrySet()) {
             if(entry.getValue()>max) {
                 finalValMax = entry.getKey();
+                max = entry.getValue();
             }
         }
         System.out.println(" k =  " + knn_cases[2] + " has class: " + finalValMax);
-        finalValMax= null;
+        finalValMax = null;
+        max=0;
 
         for (Map.Entry<String, Integer> entry : nrOfRepsCase4.entrySet()) {
             if(entry.getValue()>max) {
                 finalValMax = entry.getKey();
+                max = entry.getValue();
             }
         }
         System.out.println(" k =  " + knn_cases[3] + " has class: " + finalValMax);
-
     }
+
 }
