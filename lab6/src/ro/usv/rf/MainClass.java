@@ -27,9 +27,7 @@ public class MainClass {
                 euclidianCalc(initialMap,grades[i],knnCases);
                 i++;
             }
-
-
-
+            
         } catch (USVInputFileCustomException e) {
             System.out.println(e.getMessage());
         } finally {
@@ -43,13 +41,13 @@ public class MainClass {
                 String value = entry.getValue();
                 Double key = entry.getKey();
                 euclidianResult.put((Math.floor(Math.sqrt(Math.pow((key - grades), 2)) * 100) / 100), value);
-//           System.out.println("Marfa:" + (Math.floor(Math.sqrt(Math.pow((key - grades), 2)) * 100) / 100)+" "+ value);
         }
-        System.out.println(euclidianResult);
-        //
+        printResult(euclidianResult, grades, knn_casses);
+
+    }
+    private static void printResult(TreeMap<Double,String>euclidianResult,double grades,int[] knn_casses){
         System.out.println("---------------Set for Grades: " + grades + "-----------------");
         for (int knn_cass : knn_casses) {
-            //System.out.println(knn_cass);
             //map for every case
             Map <String, Integer> countWithmap = new HashMap <>();
             List <String> listTmpWithValues = new ArrayList <>();
@@ -59,21 +57,18 @@ public class MainClass {
 
             //for every knn case we add in a list tmp value
             for (int j = 0; j<knn_cass;j++) {
-                //System.out.println("j:" + j);
                 listTmpWithValues.add(arrValuesFromMap[j]);
-                //System.out.println("arrValuesFromMap[j]: " + arrValuesFromMap[j]);
             }
 
-            //iau doar knn_casses   ??????????????????????????????????????? knn_casses[i]
+            //iau doar knn_casses
             List <String> al2 = new ArrayList <>(listTmpWithValues.subList(0, knn_cass));
             for (String temp : al2) {
                 Integer count = countWithmap.get(temp);
                 countWithmap.put(temp, (count == null) ? 1 : count + 1);
             }
-            System.out.println("Knn: " + knn_cass + " apartine de clasa: " +
+            System.out.println("K: " + knn_cass + " apartine de clasa: " +
                     Collections.max(countWithmap.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey());
         }
-        //return euclidianResult;
     }
 
     private static TreeMap<Double, String> saveIntoTreemap (TreeMap<Double, String> allData, int numberOfPatterns,String[][] learningSet    ){
