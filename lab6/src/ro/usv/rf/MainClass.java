@@ -11,43 +11,23 @@ public class MainClass {
             learningSet = FileUtils.readLearningSetFromFile("in.txt");
             int numberOfPatterns = learningSet.length;
             int numberOfFeatures = learningSet[0].length;
-            System.out.println(String.format("The learning set has %s patters and %s features", numberOfPatterns, numberOfFeatures));
+            //System.out.println(String.format("The learning set has %s patters and %s features", numberOfPatterns, numberOfFeatures));
 
-            TreeMap<Double, String> allData =  new TreeMap<Double, String>();
-            putDataIntoATreeMap(allData,numberOfPatterns,learningSet);
-
+            TreeMap<Double, String> initialMap =  new TreeMap<Double, String>();
+            //read all data and save it into initialMap
+            saveIntoTreemap(initialMap,numberOfPatterns,learningSet);
 
             double[] grades = {3.80,5.75,6.25, 7.25, 8.5};
             int[] knnCases ={1,3,5,7,9,13,17};
-            TreeMap<Double, String> unu =  new TreeMap<Double, String>();
-            TreeMap<Double, String> doi =  new TreeMap<Double, String>();
-            TreeMap<Double, String> trei =  new TreeMap<Double, String>();
-            TreeMap<Double, String> patru =  new TreeMap<Double, String>();
-            TreeMap<Double, String> cinci =  new TreeMap<Double, String>();
 
-            Map <Double,String> euclidianCalc = new HashMap<>();
+            //calculate euclidian for  initialMap with all Grades and save it in a map
+            Map <Double,String> euclidianResults = new HashMap<>();
+            int i=0;
+            while(i<grades.length){
+                euclidianCalc(initialMap,grades[i],knnCases);
+                i++;
+            }
 
-            for(Double g: grades){
-                 for (Map.Entry<Double,String> entry : allData.entrySet()) {
-                    String value = entry.getValue();
-                    Double key = entry.getKey();
-                    if(g == 3.80)
-                        unu.put((Math.floor(Math.sqrt(Math.pow((key - g), 2)) * 100) / 100),value);
-                    else if (g == 5.75)
-                        doi.put((Math.floor(Math.sqrt(Math.pow((key - g), 2)) * 100) / 100),value);
-                    else if(g == 6.25)
-                        trei.put((Math.floor(Math.sqrt(Math.pow((key - g), 2)) * 100) / 100),value);
-                    else if(g == 7.25)
-                        patru.put((Math.floor(Math.sqrt(Math.pow((key - g), 2)) * 100) / 100),value);
-                    else
-                        cinci.put((Math.floor(Math.sqrt(Math.pow((key - g), 2)) * 100) / 100),value);
-                 }
-            }
-            for (Map.Entry<Double,String> entry : unu.entrySet())  {
-                String value = entry.getValue();
-                    Double key = entry.getKey();
-                System.out.println(key+" "+ value);
-            }
 
 
         } catch (USVInputFileCustomException e) {
@@ -57,7 +37,46 @@ public class MainClass {
         }
     }
 
-    private static TreeMap<Double, String> putDataIntoATreeMap (TreeMap<Double, String> allData, int numberOfPatterns,String[][] learningSet    ){
+    private static void euclidianCalc(TreeMap <Double, String> initialMap, double grades,int[] knn_casses) {
+        TreeMap <Double, String> euclidianResult = new TreeMap <Double, String>();
+        for (Map.Entry <Double, String> entry : initialMap.entrySet()) {
+                String value = entry.getValue();
+                Double key = entry.getKey();
+                euclidianResult.put((Math.floor(Math.sqrt(Math.pow((key - grades), 2)) * 100) / 100), value);
+//           System.out.println("Marfa:" + (Math.floor(Math.sqrt(Math.pow((key - grades), 2)) * 100) / 100)+" "+ value);
+        }
+        System.out.println(euclidianResult);
+        //
+        System.out.println("---------------Set for Grades: " + grades + "-----------------");
+        for (int knn_cass : knn_casses) {
+            //System.out.println(knn_cass);
+            //map for every case
+            Map <String, Integer> countWithmap = new HashMap <>();
+            List <String> listTmpWithValues = new ArrayList <>();
+            //convert map-Values into a String[]
+            String[] arrValuesFromMap = new String[euclidianResult.values().size()];
+            euclidianResult.values().toArray(arrValuesFromMap);
+
+            //for every knn case we add in a list tmp value
+            for (int j = 0; j<knn_cass;j++) {
+                //System.out.println("j:" + j);
+                listTmpWithValues.add(arrValuesFromMap[j]);
+                //System.out.println("arrValuesFromMap[j]: " + arrValuesFromMap[j]);
+            }
+
+            //iau doar knn_casses   ??????????????????????????????????????? knn_casses[i]
+            List <String> al2 = new ArrayList <>(listTmpWithValues.subList(0, knn_cass));
+            for (String temp : al2) {
+                Integer count = countWithmap.get(temp);
+                countWithmap.put(temp, (count == null) ? 1 : count + 1);
+            }
+            System.out.println("Knn: " + knn_cass + " apartine de clasa: " +
+                    Collections.max(countWithmap.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey());
+        }
+        //return euclidianResult;
+    }
+
+    private static TreeMap<Double, String> saveIntoTreemap (TreeMap<Double, String> allData, int numberOfPatterns,String[][] learningSet    ){
         for(int i =0; i < numberOfPatterns; i++){
             allData.put(Double.valueOf(String.valueOf(learningSet[i][0])),String.valueOf(learningSet[i][1]));
         }
