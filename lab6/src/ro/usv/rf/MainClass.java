@@ -11,7 +11,7 @@ public class MainClass {
             learningSet = FileUtils.readLearningSetFromFile("in.txt");
             int numberOfPatterns = learningSet.length;
             int numberOfFeatures = learningSet[0].length;
-            //System.out.println(String.format("The learning set has %s patters and %s features", numberOfPatterns, numberOfFeatures));
+            System.out.println(String.format("The learning set has %s patters and %s features", numberOfPatterns, numberOfFeatures));
 
             TreeMap<Double, String> initialMap =  new TreeMap<Double, String>();
             //read all data and save it into initialMap
@@ -21,13 +21,12 @@ public class MainClass {
             int[] knnCases ={1,3,5,7,9,13,17};
 
             //calculate euclidian for  initialMap with all Grades and save it in a map
-            Map <Double,String> euclidianResults = new HashMap<>();
             int i=0;
             while(i<grades.length){
                 euclidianCalc(initialMap,grades[i],knnCases);
                 i++;
             }
-            
+
         } catch (USVInputFileCustomException e) {
             System.out.println(e.getMessage());
         } finally {
@@ -71,7 +70,7 @@ public class MainClass {
         }
     }
 
-    private static TreeMap<Double, String> saveIntoTreemap (TreeMap<Double, String> allData, int numberOfPatterns,String[][] learningSet    ){
+    private static TreeMap<Double, String> saveIntoTreemap(TreeMap<Double, String> allData, int numberOfPatterns, String[][] learningSet){
         for(int i =0; i < numberOfPatterns; i++){
             allData.put(Double.valueOf(String.valueOf(learningSet[i][0])),String.valueOf(learningSet[i][1]));
         }
